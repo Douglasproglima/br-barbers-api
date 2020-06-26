@@ -1,0 +1,19 @@
+{
+  "name": "br-barbers-api",
+  "version": "1.0.0",
+  "description": "API RESTful do Sistema de Agendamento para Serviços de Barbearias",
+  "main": "index.js",
+  "repository": "git@github.com:Douglasproglima/br-barbers-api.git",
+  "author": "Douglas Lima <douglasproglima@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "nodemon ./src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
