@@ -37,7 +37,7 @@ module.exports = {
       })
       .then(() => {
         return queryInterface.sequelize.query(
-          'ALTER TABLE "user_roles" ADD CONSTRAINT "PK_USER_ROLES" PRIMARY KEY ("user_id", "role_id", "user_type")'
+          'ALTER TABLE user_roles ADD CONSTRAINT PK_USER_ROLES PRIMARY KEY (user_id, role_id, user_type)'
         );
       });
   },

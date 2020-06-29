@@ -37,7 +37,7 @@ module.exports = {
       })
       .then(() => {
         return queryInterface.sequelize.query(
-          'ALTER TABLE "user_permissions" ADD CONSTRAINT "PK_USER_PERMISSIONS" PRIMARY KEY ("user_id", "permission_id", "user_type")'
+          'ALTER TABLE user_permissions ADD CONSTRAINT PK_USER_PERMISSIONS PRIMARY KEY(user_id, permission_id, user_type)'
         );
       });
   },
