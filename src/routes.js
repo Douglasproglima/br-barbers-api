@@ -1,20 +1,12 @@
 import { Router } from 'express';
+import UserController from './app/controllers/UserController';
 
 const routes = new Router();
-const users = ['Douglas', 'Fernando', 'Augusto'];
 
-routes.get('/', (req, res) => {
-  return res.json(users);
-});
-
-routes.get('/users/:id', (req, res) => {
-  return res.json(users[req.params.id]);
-});
-
-routes.post('/users/', (req, res) => {
-  const name = req.body;
-  users.push(name);
-  return res.json(users);
-});
+routes.post('/users', UserController.store);
+routes.put('/users/:id', UserController.update);
+routes.delete('/users/:id', UserController.delete);
+routes.get('/users', UserController.index);
+routes.get('/users/:id', UserController.show);
 
 export default routes;
