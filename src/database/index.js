@@ -9,6 +9,7 @@ import RolesPermissions from '../app/models/RolesPermissions';
 import UserPermissions from '../app/models/UserPermissions';
 import UserRoles from '../app/models/UserRoles';
 
+/*
 const models = [
   User,
   Permissions,
@@ -16,7 +17,9 @@ const models = [
   RolesPermissions,
   UserPermissions,
   UserRoles,
-];
+]; */
+
+const models = [User, Permissions, Roles];
 
 class Database {
   constructor() {
@@ -24,8 +27,11 @@ class Database {
   }
 
   init() {
-    this.connection = new Sequelize(dbConfig);
-    models.map((model) => model.init(this.connection));
+    const connection = new Sequelize(dbConfig);
+    models.forEach((model) => model.init(connection));
+    models.forEach(
+      (model) => model.associate && model.associate(connection.models)
+    );
   }
 }
 

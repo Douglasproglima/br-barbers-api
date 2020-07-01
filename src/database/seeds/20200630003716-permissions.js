@@ -16,13 +16,6 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        name: 'read-admin-panel',
-        display_name: 'Read Admin Panel',
-        description: 'Read Admin Panel',
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
         name: 'create-auth-users',
         display_name: 'Create Auth Users',
         description: 'Create Auth Users',
@@ -33,13 +26,6 @@ module.exports = {
         name: 'read-auth-users',
         display_name: 'Read Auth Users',
         description: 'Read Auth Users',
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        name: 'read-admin-panel',
-        display_name: 'Read Admin Panel',
-        description: 'Read Admin Panel',
         created_at: new Date(),
         updated_at: new Date(),
       },
@@ -89,6 +75,8 @@ module.exports = {
         name: 'create-auth-permissions',
         display_name: 'Create Auth Permissions',
         description: 'Create Auth Permissions',
+        created_at: new Date(),
+        updated_at: new Date(),
       },
       {
         name: 'read-auth-permissions',
