@@ -9,8 +9,8 @@ routes.post('/sessions', SessionController.store);
 routes.post('/users', UserController.store);
 routes.use(authMiddleware);
 
-routes.put('/users/:id', UserController.update);
-routes.delete('/users/:id', UserController.delete);
+routes.put('/users/', UserController.update);
+routes.delete('/users/', UserController.delete);
 routes.get('/users', UserController.index);
 routes.get('/users/:id', UserController.show);
 
