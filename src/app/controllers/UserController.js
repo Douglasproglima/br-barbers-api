@@ -8,7 +8,9 @@ class UserController {
       });
 
       if (userExists)
-        return res.status(400).json({ message: 'User already exists.' });
+        return res
+          .status(400)
+          .json({ message: 'Já existe um usuário com este e-mail.' });
 
       const newUser = await User.create(req.body);
       const { id, name, email, provider } = newUser;
@@ -38,7 +40,8 @@ class UserController {
   async show(req, res) {
     try {
       const user = await User.findByPk(req.params.id);
-      if (!user) return res.status(400).json({ message: 'User not exists.' });
+      if (!user)
+        return res.status(400).json({ message: 'Usuário não encontrado.' });
 
       const { id, name, email } = user;
 
@@ -52,16 +55,25 @@ class UserController {
 
   async update(req, res) {
     try {
-      const user = await User.findByPk(req.params.id);
+      const user = await User.findByPk(req.userId);
       if (!user) {
         return res.status(400).json({
           erros: ['Nenhum registro encontrado'],
         });
       }
 
-      const userUpdate = await user.update(req.body);
-      const { id, name, email } = userUpdate;
-      return res.json({ id, name, email });
+      const { email, oldPassword } = req.body;
+      if (email !== user.email) {
+        const userExists = await User.findOne({ where: { email } });
+        if (userExists)
+          return res.status(400).json({ message: 'Usuário não encontrado' });
+      }
+
+      if (oldPassword && !(await user.checkPassword(oldPassword)))
+        return res.status(401).json({ message: 'A senha está incorreta.' });
+
+      const { id, name, provider } = await user.update(req.body);
+      return res.json({ id, name, email, provider });
     } catch (err) {
       return res.status(400).json({
         errors: err.errors.map((erro) => erro.message),
