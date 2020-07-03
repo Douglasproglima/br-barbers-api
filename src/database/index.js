@@ -3,6 +3,7 @@ import dbConfig from '../config/database';
 
 /* Models */
 import User from '../app/models/User';
+import File from '../app/models/File';
 import Permissions from '../app/models/Permissions';
 import Roles from '../app/models/Roles';
 import RolesPermissions from '../app/models/RolesPermissions';
@@ -19,7 +20,7 @@ const models = [
   UserRoles,
 ]; */
 
-const models = [User, Permissions, Roles];
+const models = [User, File, Permissions, Roles];
 
 class Database {
   constructor() {
@@ -28,10 +29,8 @@ class Database {
 
   init() {
     const connection = new Sequelize(dbConfig);
-    models.forEach((model) => model.init(connection));
-    models.forEach(
-      (model) => model.associate && model.associate(connection.models)
-    );
+    models.forEach((md) => md.init(connection));
+    models.forEach((md) => md.associate && md.associate(connection.models));
   }
 }
 
