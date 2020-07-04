@@ -11,14 +11,14 @@ module.exports = {
       {
         name: 'manager',
         display_name: 'Manager',
-        description: 'Manager',
+        description: 'Gerente',
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         name: 'customer',
         display_name: 'Customer',
-        description: 'Customer',
+        description: 'Cliente',
         created_at: new Date(),
         updated_at: new Date(),
       },
