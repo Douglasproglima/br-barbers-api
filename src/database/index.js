@@ -4,23 +4,23 @@ import dbConfig from '../config/database';
 /* Models */
 import User from '../app/models/User';
 import File from '../app/models/File';
+import Appointment from '../app/models/Appointment';
 import Permissions from '../app/models/Permissions';
 import Roles from '../app/models/Roles';
 import RolesPermissions from '../app/models/RolesPermissions';
 import UserPermissions from '../app/models/UserPermissions';
 import UserRoles from '../app/models/UserRoles';
 
-/*
 const models = [
   User,
+  File,
+  Appointment,
   Permissions,
   Roles,
   RolesPermissions,
   UserPermissions,
   UserRoles,
-]; */
-
-const models = [User, File, Permissions, Roles];
+];
 
 class Database {
   constructor() {
