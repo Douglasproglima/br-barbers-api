@@ -27,7 +27,7 @@ class User extends Model {
 
   static associate(models) {
     // Salva a referencia do id avatar na tabela de user
-    this.belongsTo(models.File, { foreignKey: 'avatar_id' });
+    this.belongsTo(models.File, { foreignKey: 'avatar_id', as: 'Avatar' });
   }
 
   checkPassword(password) {

@@ -13,6 +13,13 @@ class Roles extends Model {
       }
     );
   }
+  /*
+  static associate(models) {
+    this.belongsTo((models.UserRoles, models.RolesPermissions), {
+      foreignKey: 'role_id',
+    });
+    // this.belongsTo(models.RolesPermissions, { foreignKey: 'role_id' });
+  } */
 }
 
 export default Roles;

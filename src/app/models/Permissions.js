@@ -13,6 +13,10 @@ class Permissions extends Model {
       }
     );
   }
+  /*
+  static associate(models) {
+    this.belongsTo(models.RolesPermissions, { foreignKey: 'permission_id' });
+  } */
 }
 
 export default Permissions;

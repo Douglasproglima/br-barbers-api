@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import User from '../models/User';
+import File from '../models/File';
 
 class UserController {
   async store(req, res) {
@@ -39,29 +40,49 @@ class UserController {
   async index(req, res) {
     try {
       const users = await User.findAll({
-        attributes: ['id', 'name', 'email', 'provider'],
+        attributes: ['id', 'name', 'email', 'avatar_id'],
+        include: [
+          {
+            model: File,
+            as: 'Avatar',
+            attributes: ['id', 'name', 'path', 'url'],
+            order: [['id', 'DESC']],
+          },
+        ],
         order: [['id', 'DESC']],
       });
       return res.json(users);
     } catch (err) {
       return res.status(400).json({
-        errors: err.errors.map((erro) => erro.message),
+        message: `Erro aor realizar consulta: ${err}`,
+        // errors: err.errors.map((erro) => erro.message),
       });
     }
   }
 
   async show(req, res) {
     try {
-      const user = await User.findByPk(req.params.id);
+      const user = await User.findAll({
+        where: { id: req.params.id },
+        attributes: ['id', 'name', 'email'],
+        include: [
+          {
+            model: File,
+            as: 'Avatar',
+            attributes: ['id', 'name', 'path', 'url'],
+            order: [['id', 'DESC']],
+          },
+        ],
+        order: [['id', 'DESC']],
+      });
       if (!user)
         return res.status(400).json({ message: 'Usuário não encontrado.' });
 
-      const { id, name, email } = user;
-
-      return res.json({ id, name, email });
+      return res.json(user);
     } catch (err) {
       return res.status(400).json({
-        errors: err.errors.map((erro) => erro.message),
+        message: `Erro aor realizar consulta: ${err}`,
+        // errors: err.errors.map((erro) => erro.message),
       });
     }
   }
