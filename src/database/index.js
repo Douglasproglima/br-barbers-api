@@ -7,7 +7,7 @@ import File from '../app/models/File';
 import Appointment from '../app/models/Appointment';
 import Permissions from '../app/models/Permissions';
 import Roles from '../app/models/Roles';
-import RolesPermissions from '../app/models/RolesPermissions';
+import RolePermissions from '../app/models/RolePermissions';
 import UserPermissions from '../app/models/UserPermissions';
 import UserRoles from '../app/models/UserRoles';
 
@@ -17,7 +17,7 @@ const models = [
   Appointment,
   Permissions,
   Roles,
-  RolesPermissions,
+  RolePermissions,
   UserPermissions,
   UserRoles,
 ];

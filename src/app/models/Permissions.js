@@ -13,10 +13,21 @@ class Permissions extends Model {
       }
     );
   }
-  /*
+
   static associate(models) {
-    this.belongsTo(models.RolesPermissions, { foreignKey: 'permission_id' });
-  } */
+    this.hasMany(models.UserPermissions, {
+      foreignKey: 'id',
+      targetKey: 'permission_id',
+      sourceKey: 'id',
+      as: 'user_permissions',
+    });
+    this.hasMany(models.RolePermissions, {
+      foreignKey: 'id',
+      targetKey: 'role_id',
+      sourceKey: 'id',
+      as: 'role_permissions',
+    });
+  }
 }
 
 export default Permissions;

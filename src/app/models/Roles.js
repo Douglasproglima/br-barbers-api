@@ -13,13 +13,21 @@ class Roles extends Model {
       }
     );
   }
-  /*
+
   static associate(models) {
-    this.belongsTo((models.UserRoles, models.RolesPermissions), {
+    this.hasMany(models.UserRoles, {
       foreignKey: 'role_id',
+      targetKey: 'id',
+      sourceKey: 'id',
+      as: 'user_roles',
     });
-    // this.belongsTo(models.RolesPermissions, { foreignKey: 'role_id' });
-  } */
+    this.belongsToMany(models.RolePermissions, {
+      foreignKey: 'role_id',
+      otherKey: 'id',
+      as: 'role_permissions',
+      through: 'Permissions',
+    });
+  }
 }
 
 export default Roles;

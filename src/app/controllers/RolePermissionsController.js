@@ -1,9 +1,7 @@
 import * as Yup from 'yup';
-import Roles from '../models/Roles';
 import RolePermissions from '../models/RolePermissions';
-import Permissions from '../models/Permissions';
 
-class RoleController {
+class RolePermissionsController {
   async store(req, res) {
     try {
       const schema = Yup.object().shape({
@@ -17,17 +15,17 @@ class RoleController {
           .status(400)
           .json({ message: 'Falha na validação dos campos' });
 
-      const rolesExists = await Roles.findOne({
+      const rolesPermissionsExists = await RolesPermissions.findOne({
         where: { description: req.body.description },
       });
 
-      if (rolesExists)
+      if (rolesPermissionsExists)
         return res
           .status(400)
           .json({ message: 'Já existe uma regra com essa descrição.' });
 
-      const newRoles = await Roles.create(req.body);
-      const { id, description } = newRoles;
+      const newRolesPermissions = await RolesPermissions.create(req.body);
+      const { id, description } = newRolesPermissions;
 
       return res.json({ id, description });
     } catch (err) {
@@ -40,25 +38,11 @@ class RoleController {
 
   async index(req, res) {
     try {
-      const roles = await Roles.findAll({
-        attributes: ['id', 'description'],
-        /* include: {
-          model: RolePermissions,
-          as: 'role_permissions',
-          attributes: ['role_id', 'permission_id'],
-        },
-        includes: {
-          model: Permissions,
-          as: 'permissions',
-          through: {
-            attributes: ['id', 'description'],
-            where: { completed: true },
-          },
-        }, */
-        order: [['id', 'DESC']],
+      const rolesPermissions = await RolePermissions.findAll({
+        attributes: ['role_id', 'permission_id'],
+        order: [['role_id', 'DESC']],
       });
-
-      return res.json(roles);
+      return res.json(rolesPermissions);
     } catch (err) {
       return res.status(400).json({
         message: 'Erro ao pesquisar as regras.',
@@ -69,13 +53,13 @@ class RoleController {
 
   async show(req, res) {
     try {
-      const roles = await Roles.findByPk(req.params.id);
-      if (!roles)
+      const rolesPermissions = await RolePermissions.findByPk(req.params.id);
+      if (!rolesPermissions)
         return res.status(400).json({ message: 'Permissão não encontrada.' });
 
-      const { id, description } = roles;
+      const { role_id, permission_id } = rolesPermissions;
 
-      return res.json({ id, description });
+      return res.json({ role_id, permission_id });
     } catch (err) {
       return res.status(400).json({
         message: 'Erro ao pesquisar regra.',
@@ -95,15 +79,15 @@ class RoleController {
       if (!(await schema.isValid(req.body)))
         return res.status(400).json({ message: 'Falha na validação' });
 
-      const roles = await Roles.findByPk(req.params.id);
-      if (!roles) {
+      const rolesPermissions = await RolePermissions.findByPk(req.params.id);
+      if (!rolesPermissions) {
         return res.status(400).json({
           erros: ['Nenhum registro encontrado'],
         });
       }
 
-      const { id, description } = await roles.update(req.body);
-      return res.json({ id, description });
+      const { role_id, permission_id } = await RolePermissions.update(req.body);
+      return res.json({ role_id, permission_id });
     } catch (err) {
       return res.status(400).json({
         message: 'Erro ao atualizar os dados.',
@@ -114,14 +98,14 @@ class RoleController {
 
   async delete(req, res) {
     try {
-      const roles = await Roles.findByPk(req.params.id);
-      if (!roles) {
+      const rolesPermissions = await RolePermissions.findByPk(req.params.id);
+      if (!rolesPermissions) {
         return res.status(400).json({
           erros: ['Nenhum registro encontrado'],
         });
       }
 
-      await roles.destroy();
+      await rolesPermissions.destroy();
       return res.json({
         message: 'Registro deletado com sucesso',
       });
@@ -134,4 +118,4 @@ class RoleController {
   }
 }
 
-export default new RoleController();
+export default new RolePermissionsController();
