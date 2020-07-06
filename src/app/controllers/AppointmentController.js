@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import User from '../models/User';
+import File from '../models/File';
 import Appointment from '../models/Appointment';
 
 class AppointmentController {
@@ -47,13 +48,22 @@ class AppointmentController {
   async index(req, res) {
     try {
       const appointments = await Appointment.findAll({
-        attributes: ['id', 'date', 'canceled_at'],
+        where: { user_id: req.userId, canceled_at: null },
+        attributes: ['id', 'date'],
         include: [
           {
             model: User,
-            as: 'user',
+            as: 'provider',
             attributes: ['id', 'name'],
             order: [['id', 'DESC']],
+            include: [
+              {
+                model: File,
+                as: 'Avatar',
+                attributes: ['id', 'path', 'url'],
+                order: [['id', 'DESC']],
+              },
+            ],
           },
         ],
         order: [['id', 'DESC']],
