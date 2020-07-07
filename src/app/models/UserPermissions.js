@@ -15,13 +15,13 @@ class UserPermissions extends Model {
   }
 
   static associate(models) {
-    /* this.hasMany(models.User, {
+    this.belongsTo(models.User, {
       foreignKey: 'user_id',
       targetKey: 'id',
       sourceKey: 'id',
       as: 'user',
-    }); */
-    this.hasMany(models.Permissions, {
+    });
+    this.belongsTo(models.Permissions, {
       foreignKey: 'permission_id',
       sourceKey: 'id',
       targetKey: 'id',
