@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import User from '../models/User';
-// import UserPermissions from '../models/UserPermissions';
-// import Permissions from '../models/Permissions';
+import UserPermissions from '../models/UserPermissions';
+import Permissions from '../models/Permissions';
 import File from '../models/File';
 
 class UserController {
@@ -50,6 +50,12 @@ class UserController {
             attributes: ['id', 'name', 'path', 'url'],
             order: [['id', 'DESC']],
           },
+          {
+            model: UserPermissions,
+            as: 'user_permissions',
+            attributes: ['user_id', 'permission_id', 'user_type'],
+            order: [['permission_id', 'DESC']],
+          },
           /* {
             model: UserPermissions,
             as: 'user_permissions',
@@ -67,6 +73,7 @@ class UserController {
         ],
         order: [['id', 'DESC']],
       });
+      console.log(users);
       return res.json(users);
     } catch (err) {
       return res.status(400).json({

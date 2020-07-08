@@ -15,10 +15,10 @@ class UserRoles extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.User, { foreignKey: 'user_id', as: 'User' });
+    this.belongsTo(models.User, { foreignKey: 'user_id', as: 'users' });
     this.belongsTo(models.Roles, {
       foreignKey: 'role_id',
-      as: 'Roles',
+      as: 'roles',
     });
   }
 }

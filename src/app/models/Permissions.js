@@ -15,6 +15,20 @@ class Permissions extends Model {
   }
 
   static associate(models) {
+    this.belongsToMany(models.User, {
+      // otherKey: '',
+      through: 'UserPermissions',
+      foreignKey: 'user_id',
+      as: 'user_permissions',
+    });
+
+    /* this.belongsToMany(models.UserPermissions, {
+      // otherKey: '',
+      through: 'User',
+      foreignKey: 'permission_id',
+      as: 'users',
+    }); */
+    /*
     this.hasMany(models.UserPermissions, {
       foreignKey: 'id',
       targetKey: 'permission_id',
@@ -27,6 +41,7 @@ class Permissions extends Model {
       sourceKey: 'id',
       as: 'role_permissions',
     });
+    */
   }
 }
 

@@ -29,11 +29,17 @@ class User extends Model {
     // Salva a referencia do id avatar na tabela de user
     this.belongsTo(models.File, { foreignKey: 'avatar_id', as: 'Avatar' });
     this.hasMany(models.UserPermissions, {
-      foreignKey: 'id',
-      targetKey: 'user_id',
-      sourceKey: 'id',
+      foreignKey: 'user_id',
       as: 'user_permissions',
     });
+    /* this.belongsToMany(models.UserPermissions, {
+      through: 'Permissions',
+      foreignKey: 'user_id',
+      otherKey: 'permission_id',
+      targetKey: 'id',
+      sourceKey: 'id',
+      as: 'user_permissions',
+    }); */
   }
 
   checkPassword(password) {
