@@ -1,7 +1,10 @@
 import * as Yup from 'yup';
+import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 import User from '../models/User';
 import File from '../models/File';
 import Appointment from '../models/Appointment';
+import Notification from '../schemas/Notification';
 
 class AppointmentController {
   async store(req, res) {
@@ -30,10 +33,41 @@ class AppointmentController {
           .json({ message: 'Você não tem permissão de criar um agendamento' });
       }
 
+      // Transforma dataString para obj Date do Js  e retorna apenas a hora
+      const hourStart = startOfHour(parseISO(date));
+      if (isBefore(hourStart, new Date()))
+        return res.status(401).json({
+          message: 'Não é permitido criar um agendamento no passado.',
+        });
+
+      // Valida se um agendamento está disponivel no mesmo horario para o agendamento atual
+      const checkAvailability = await Appointment.findOne({
+        where: {
+          provider_id,
+          canceled_at: null,
+          date: hourStart,
+        },
+      });
+
+      if (checkAvailability)
+        return res
+          .status(400)
+          .json({ message: 'Este horário já está agendado.' });
+
       const appointment = await Appointment.create({
         user_id: req.userId,
         provider_id,
-        date,
+        date: hourStart,
+      });
+
+      /* Notificação ao Prestador de Serviço */
+      const { name } = await User.findByPk(req.userId);
+      const formateDate = format(hourStart, "'dia' dd 'de MMMM', às' H:mm'h'", {
+        locale: pt,
+      });
+      await Notification.create({
+        content: `Novo agendamento de '${name}' para o dia ${formateDate}`,
+        user: provider_id,
       });
 
       return res.json(appointment);
@@ -71,6 +105,7 @@ class AppointmentController {
         ],
         order: [['id', 'DESC']],
       });
+
       return res.json(appointments);
     } catch (err) {
       return res.status(400).json({

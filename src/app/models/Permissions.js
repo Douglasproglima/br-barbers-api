@@ -15,11 +15,11 @@ class Permissions extends Model {
   }
 
   static associate(models) {
-    this.belongsToMany(models.User, {
-      // otherKey: '',
-      through: 'UserPermissions',
-      foreignKey: 'user_id',
+    this.hasMany(models.UserPermissions, {
+      foreignKey: 'permission_id',
       as: 'user_permissions',
+      // targetKey: 'permission_id',
+      // sourceKey: 'id',
     });
 
     /* this.belongsToMany(models.UserPermissions, {
@@ -29,10 +29,10 @@ class Permissions extends Model {
       as: 'users',
     }); */
     /*
-    this.hasMany(models.UserPermissions, {
-      foreignKey: 'id',
-      targetKey: 'permission_id',
-      sourceKey: 'id',
+    this.belongsToMany(models.User, {
+      // otherKey: '',
+      through: 'UserPermissions',
+      foreignKey: 'user_id',
       as: 'user_permissions',
     });
     this.hasMany(models.RolePermissions, {

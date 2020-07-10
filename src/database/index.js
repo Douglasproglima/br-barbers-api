@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import mongoose from 'mongoose';
 import dbConfig from '../config/database';
 
 /* Models */
@@ -25,12 +26,23 @@ const models = [
 class Database {
   constructor() {
     this.init();
+    this.mongo();
   }
 
   init() {
     const connection = new Sequelize(dbConfig);
     models.forEach((md) => md.init(connection));
     models.forEach((md) => md.associate && md.associate(connection.models));
+  }
+
+  mongo() {
+    this.mongoConnection = mongoose.connect(
+      'mongodb://localhost:27017/br_barber_api',
+      {
+        useNewUrlParser: true,
+        useFindAndModify: true,
+      }
+    );
   }
 }
 
