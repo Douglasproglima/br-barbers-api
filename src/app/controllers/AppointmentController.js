@@ -62,18 +62,22 @@ class AppointmentController {
 
       /* Notificação ao Prestador de Serviço */
       const { name } = await User.findByPk(req.userId);
-      const formateDate = format(hourStart, "'dia' dd 'de MMMM', às' H:mm'h'", {
-        locale: pt,
-      });
+      const formateDate = format(
+        hourStart,
+        "'dia' dd 'de' MMMM', às' H:mm'h'",
+        {
+          locale: pt,
+        }
+      );
       await Notification.create({
-        content: `Novo agendamento de '${name}' para o dia ${formateDate}`,
+        content: `Novo agendamento de '${name}' para o ${formateDate}`,
         user: provider_id,
       });
 
       return res.json(appointment);
     } catch (err) {
       return res.status(400).json({
-        errors: err,
+        message: `Erro ao realizar agendamento: ${err}`,
         // errors: err.errors.map((erro) => erro.message),
       });
     }

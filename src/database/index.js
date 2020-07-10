@@ -1,7 +1,6 @@
 import Sequelize from 'sequelize';
 import mongoose from 'mongoose';
 import dbConfig from '../config/database';
-
 /* Models */
 import User from '../app/models/User';
 import File from '../app/models/File';
@@ -11,6 +10,8 @@ import Roles from '../app/models/Roles';
 import RolePermissions from '../app/models/RolePermissions';
 import UserPermissions from '../app/models/UserPermissions';
 import UserRoles from '../app/models/UserRoles';
+
+require('dotenv').config();
 
 const models = [
   User,
@@ -36,13 +37,16 @@ class Database {
   }
 
   mongo() {
-    this.mongoConnection = mongoose.connect(
-      'mongodb://localhost:27017/br_barber_api',
-      {
+    this.mongoConnection = mongoose
+      .connect(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useFindAndModify: true,
-      }
-    );
+        useUnifiedTopology: true,
+      })
+      .then(() => console.log('MongoDB Conectado!'))
+      .catch((err) => {
+        console.log(`Erro ao Conectar MongoDB: ${err.message}`);
+      });
   }
 }
 
