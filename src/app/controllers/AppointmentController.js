@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import { Op } from 'sequelize';
 import pt from 'date-fns/locale/pt';
 import User from '../models/User';
 import File from '../models/File';
@@ -32,6 +33,16 @@ class AppointmentController {
           .status(401)
           .json({ message: 'Você não tem permissão de criar um agendamento' });
       }
+
+      const isNotUserProvider = await User.findOne({
+        where: {
+          id: req.userId,
+        },
+      });
+      if (isNotUserProvider)
+        return res.status(401).json({
+          message: 'Você não pode criar um agendamento para você mesmo.',
+        });
 
       // Transforma dataString para obj Date do Js  e retorna apenas a hora
       const hourStart = startOfHour(parseISO(date));

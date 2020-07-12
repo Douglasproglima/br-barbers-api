@@ -50,12 +50,12 @@ class UserController {
             attributes: ['id', 'name', 'path', 'url'],
             order: [['id', 'DESC']],
           },
-          {
+          /*           {
             model: UserPermissions,
             as: 'user_permissions',
             attributes: ['user_id', 'permission_id', 'user_type'],
             order: [['permission_id', 'DESC']],
-          },
+          }, */
           /* {
             model: UserPermissions,
             as: 'user_permissions',

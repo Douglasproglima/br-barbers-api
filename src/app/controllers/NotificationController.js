@@ -23,9 +23,20 @@ class NotificationController {
       .sort({ createdAt: 'DESC' })
       .limit(20); // Vai buscar do mongo por isso o name column está assim
 
-    const { user, content, read } = notifications;
-
     return res.json(notifications);
+  }
+
+  async update(req, res) {
+    // const notification = await Notification.findById(req.params.id);
+
+    /* Mongoose oferece outros métodos */
+    const notification = await Notification.findByIdAndUpdate(
+      req.params.id,
+      { read: true }, // atualiza a informação
+      { new: true } // Retorna a nova informação
+    );
+
+    return res.json(notification);
   }
 }
 
