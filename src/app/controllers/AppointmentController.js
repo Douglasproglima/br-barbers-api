@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
-import { startOfHour, parseISO, isBefore, format } from 'date-fns';
-import { Op } from 'sequelize';
+import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import User from '../models/User';
 import File from '../models/File';
@@ -34,7 +33,7 @@ class AppointmentController {
           .json({ message: 'Você não tem permissão de criar um agendamento' });
       }
 
-      const isNotUserProvider = await User.findOne({
+      /*       const isNotUserProvider = await User.findOne({
         where: {
           id: req.userId,
         },
@@ -42,7 +41,7 @@ class AppointmentController {
       if (isNotUserProvider)
         return res.status(401).json({
           message: 'Você não pode criar um agendamento para você mesmo.',
-        });
+        }); */
 
       // Transforma dataString para obj Date do Js  e retorna apenas a hora
       const hourStart = startOfHour(parseISO(date));
@@ -124,10 +123,33 @@ class AppointmentController {
       return res.json(appointments);
     } catch (err) {
       return res.status(400).json({
-        errors: err,
+        Message: `Erro ao realizar consulta: ${err}`,
         // errors: err.errors.map((erro) => erro.message),
       });
     }
+  }
+
+  async delete(req, res) {
+    const appointment = await Appointment.findByPk(req.params.id);
+    if (appointment.user_id !== req.userId) {
+      return res.status(401).json({
+        message: 'Você não tem permissão para cancelar este agendamento.',
+      });
+    }
+
+    const dateWithSub = subHours(appointment.date, 2); // remove duas do agendamento
+    // Subtrai duas horas da data atual
+    if (isBefore(dateWithSub, new Date())) {
+      return res.status(401).json({
+        message:
+          'Você não pode realizar o cancelamento do agendamento pois falta menos de horas com relação a data agendada.',
+      });
+    }
+
+    appointment.canceled_at = new Date();
+    await appointment.save();
+
+    return res.json(appointment);
   }
 }
 
