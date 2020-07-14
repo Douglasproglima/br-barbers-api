@@ -5,6 +5,7 @@ import User from '../models/User';
 import File from '../models/File';
 import Appointment from '../models/Appointment';
 import Notification from '../schemas/Notification';
+import Mail from '../../lib/Mail';
 
 class AppointmentController {
   async store(req, res) {
@@ -122,34 +123,56 @@ class AppointmentController {
 
       return res.json(appointments);
     } catch (err) {
-      return res.status(400).json({
-        Message: `Erro ao realizar consulta: ${err}`,
+      return res.status(401).json({
+        Message: `Ocorreu um erro insperado ao consultar o registro. ${err}`,
         // errors: err.errors.map((erro) => erro.message),
       });
     }
   }
 
   async delete(req, res) {
-    const appointment = await Appointment.findByPk(req.params.id);
-    if (appointment.user_id !== req.userId) {
+    try {
+      const appointment = await Appointment.findByPk(req.params.id, {
+        include: [
+          {
+            model: User,
+            as: 'provider',
+            attributes: ['name', 'email'],
+          },
+        ],
+      });
+      if (appointment.user_id !== req.userId) {
+        return res.status(401).json({
+          message: 'Você não tem permissão para cancelar este agendamento.',
+        });
+      }
+
+      const dateWithSub = subHours(appointment.date, 2); // remove duas do agendamento
+      // Subtrai duas horas da data atual
+      if (isBefore(dateWithSub, new Date())) {
+        return res.status(401).json({
+          message:
+            'Você não pode realizar o cancelamento do agendamento pois falta menos de horas com relação a data agendada.',
+        });
+      }
+
+      appointment.canceled_at = new Date();
+      // await appointment.save();
+
+      // Envio de email após o cancelamento
+      await Mail.sendMail({
+        to: `${appointment.provider.name} <${appointment.provider.email}>`,
+        subject: 'Agendamento Cancelado',
+        text: 'Você possui um novo agendamento cancelamento',
+      });
+
+      return res.json(appointment);
+    } catch (err) {
       return res.status(401).json({
-        message: 'Você não tem permissão para cancelar este agendamento.',
+        Message: `Ocorreu um erro insperado ao cancelar o agendamento. ${err}`,
+        // errors: err.errors.map((erro) => erro.message),
       });
     }
-
-    const dateWithSub = subHours(appointment.date, 2); // remove duas do agendamento
-    // Subtrai duas horas da data atual
-    if (isBefore(dateWithSub, new Date())) {
-      return res.status(401).json({
-        message:
-          'Você não pode realizar o cancelamento do agendamento pois falta menos de horas com relação a data agendada.',
-      });
-    }
-
-    appointment.canceled_at = new Date();
-    await appointment.save();
-
-    return res.json(appointment);
   }
 }
 
