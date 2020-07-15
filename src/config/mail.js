@@ -1,4 +1,4 @@
-import appConfig from './appConfig';
+// import appConfig from './appConfig';
 
 /* export default {
   host: appConfig.hostEmail,
@@ -14,12 +14,12 @@ import appConfig from './appConfig';
 }; */
 
 export default {
-  host: appConfig.hostEmail,
-  port: appConfig.portEmail,
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
   secure: false,
   auth: {
-    user: appConfig.auth.userEmail,
-    pass: appConfig.auth.passEmail,
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
   },
   default: {
     from: 'Equipe Proglima <noreply@douglasproglima.com>',
