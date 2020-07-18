@@ -39,12 +39,13 @@ class Queue {
       // Busca o bee e handle(Método init()) da fila relacionada ao determinado job
       const { bee, handle } = this.queues[job.key];
 
+      // bee.process(handle);
       bee.on('failed', this.handleFailure).process(handle);
     });
   }
 
   handleFailure(job, err) {
-    console.log(job, err);
+    console.log(`Queue ${job.queue.name}: FAILED: `, err);
   }
 }
 

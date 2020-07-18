@@ -5,9 +5,9 @@ import User from '../models/User';
 import File from '../models/File';
 import Appointment from '../models/Appointment';
 import Notification from '../schemas/Notification';
-import Mail from '../../lib/Mail';
-// import CancellationMail from '../jobs/CancellationMail';
-// import Queue from '../../lib/Queue';
+// import Mail from '../../lib/Mail';
+import CancellationMail from '../jobs/CancellationMail';
+import Queue from '../../lib/Queue';
 
 class AppointmentController {
   async store(req, res) {
@@ -155,6 +155,7 @@ class AppointmentController {
       }
 
       const dateWithSub = subHours(appointment.date, 2); // remove duas do agendamento
+      console.log(dateWithSub);
       // Subtrai duas horas da data atual
       if (isBefore(dateWithSub, new Date())) {
         return res.status(401).json({
@@ -167,11 +168,11 @@ class AppointmentController {
       // await appointment.save();
 
       // Job para envio de email após o cancelamento
-      /*       await Queue.add(CancellationMail.key, {
+      await Queue.add(CancellationMail.key, {
         appointment,
-      }); */
+      });
       // Envio de email após o cancelamento
-      await Mail.sendMail({
+      /*       await Mail.sendMail({
         to: `${appointment.provider.name} <${appointment.provider.email}>`,
         subject: 'Agendamento Cancelado',
         template: 'cancellation',
@@ -182,7 +183,7 @@ class AppointmentController {
             locale: pt,
           }),
         },
-      });
+      }); */
       return res.json(appointment);
     } catch (err) {
       return res.status(401).json({

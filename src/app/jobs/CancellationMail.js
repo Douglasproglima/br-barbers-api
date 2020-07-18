@@ -10,7 +10,7 @@ class CancellationMail {
   async handle({ data }) {
     const { appointment } = data; // Info vem do AppointmentController()->Queue.add()
 
-    console.log('TESTE CancellationMail');
+    console.log(`Fila processada: ${appointment.date}`);
 
     await Mail.sendMail({
       to: `${appointment.provider.name} <${appointment.provider.email}>`,
@@ -18,7 +18,7 @@ class CancellationMail {
       template: 'cancellation',
       context: {
         provider: appointment.provider.name,
-        user: appointment.user.name,
+        user: appointment.users.name,
         date: format(
           parseISO(appointment.date),
           "'dia' dd 'de' MMMM', às' H:mm'h'",
