@@ -11,7 +11,7 @@ import RolePermissions from '../app/models/RolePermissions';
 import UserPermissions from '../app/models/UserPermissions';
 import UserRoles from '../app/models/UserRoles';
 
-require('dotenv').config();
+// require('dotenv').config();
 
 const models = [
   User,

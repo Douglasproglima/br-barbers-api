@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import Queue from './lib/Queue';
 
 // Necessário para executar os Jobs/Fila em outra instância do Nodejs
