@@ -73,7 +73,7 @@ class UserController {
         ],
         order: [['id', 'DESC']],
       });
-      console.log(users);
+
       return res.json(users);
     } catch (err) {
       return res.status(400).json({
@@ -87,7 +87,7 @@ class UserController {
     try {
       const user = await User.findAll({
         where: { id: req.params.id },
-        attributes: ['id', 'name', 'email'],
+        attributes: ['id', 'name', 'email', 'avatar_id'],
         include: [
           {
             model: File,

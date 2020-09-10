@@ -39,7 +39,7 @@ class ProviderController {
     try {
       const provider = await User.findAll({
         where: { provider: true },
-        attributes: ['id', 'name', 'email'],
+        attributes: ['id', 'name', 'email', 'avatar_id'],
         include: [
           {
             model: File,
@@ -61,13 +61,26 @@ class ProviderController {
 
   async show(req, res) {
     try {
-      const provider = await User.findByPk(req.params.id);
+      const provider = await User.findAll({
+        where: { id: req.params.id },
+        attributes: ['id', 'name', 'email', 'avatar_id'],
+        include: [
+          {
+            model: File,
+            as: 'avatar',
+            attributes: ['id', 'name', 'path', 'url'],
+            order: [['id', 'DESC']],
+          },
+        ],
+        order: [['id', 'DESC']],
+      });
+
       if (!provider)
         return res.status(400).json({ message: 'Provider not exists.' });
 
-      const { id, name, email } = provider;
+      const { id, name, email, avatar_id } = provider;
 
-      return res.json({ id, name, email });
+      return res.json({ id, name, email, avatar_id });
     } catch (err) {
       return res.status(400).json({
         errors: err,
