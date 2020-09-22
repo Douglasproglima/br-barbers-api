@@ -113,7 +113,7 @@ class AppointmentController {
             include: [
               {
                 model: File,
-                as: 'Avatar',
+                as: 'avatar',
                 attributes: ['id', 'path', 'url'],
                 order: [['id', 'DESC']],
               },
