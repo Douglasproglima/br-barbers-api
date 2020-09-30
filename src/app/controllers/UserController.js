@@ -87,7 +87,7 @@ class UserController {
     try {
       const user = await User.findAll({
         where: { id: req.params.id },
-        attributes: ['id', 'name', 'email', 'avatar_id'],
+        attributes: ['id', 'name', 'email', 'provider', 'avatar_id'],
         include: [
           {
             model: File,
